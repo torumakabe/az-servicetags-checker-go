@@ -4,12 +4,12 @@ Reporting network service tags diff before/after change
 
 ## Overaview
 
-![Overview](https://raw.githubusercontent.com/ToruMakabe/Images/master/servicetags-checker-1.jpg?raw=true "Overview")
+<img src="https://raw.githubusercontent.com/ToruMakabe/Images/master/servicetags-checker-1.jpg?raw=true" width="500">
 
 ## Infra deployment with Terraform
 
-![Deploy](https://raw.githubusercontent.com/ToruMakabe/Images/master/servicetags-checker-2.jpg?raw=true "Deploy")
+<img src="https://raw.githubusercontent.com/ToruMakabe/Images/master/servicetags-checker-2.jpg?raw=true" width="600">
 
 ## CI & Build/Push Container
 
-![CIandBuild](https://raw.githubusercontent.com/ToruMakabe/Images/master/servicetags-checker-3.jpg?raw=true "CIandBuild")
+<img src="https://raw.githubusercontent.com/ToruMakabe/Images/master/servicetags-checker-3.jpg?raw=true" width="400">
