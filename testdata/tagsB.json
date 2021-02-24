@@ -1,0 +1,58 @@
+{
+    "name": "Public",
+    "id": "/subscriptions/hoge/providers/Microsoft.Network/serviceTags/Public",
+    "type": "Microsoft.Network/serviceTags",
+    "changeNumber": "74",
+    "cloud": "Public",
+    "values": [
+        {
+            "properties": {
+                "changeNumber": "2",
+                "region": "eastus2",
+                "systemService": "ActionGroup",
+                "addressPrefixes": [
+                    "52.184.145.166/32"
+                ]
+            },
+            "name": "ActionGroup.EastUS2",
+            "id": "ActionGroup.EastUS2"
+        },
+        {
+            "properties": {
+                "changeNumber": "1",
+                "region": "germanywc",
+                "systemService": "ActionGroup",
+                "addressPrefixes": [
+                    "2603:1020:c04:402::178/125"
+                ]
+            },
+            "name": "ActionGroup.GermanyWestCentral",
+            "id": "ActionGroup.GermanyWestCentral"
+        },
+        {
+            "properties": {
+                "changeNumber": "1",
+                "region": "ukwest",
+                "systemService": "ActionGroup",
+                "addressPrefixes": [
+                    "2603:1020:605:402::178/125"
+                ]
+            },
+            "name": "ActionGroup.UKWest",
+            "id": "ActionGroup.UKWest"
+        },
+        {
+            "properties": {
+                "changeNumber": "2",
+                "region": "switzerlandw",
+                "systemService": "LogicApps",
+                "addressPrefixes": [
+                    "51.107.156.160/27",
+                    "51.107.156.192/28"
+                ]
+            },
+            "name": "LogicApps.SwitzerlandWest",
+            "id": "LogicApps.SwitzerlandWest"
+        }
+    ]
+}

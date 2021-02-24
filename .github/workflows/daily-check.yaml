@@ -1,0 +1,70 @@
+name: "Daily Check"
+
+on:
+  schedule:
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: "Check"
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: "Prepare"
+        id: prep
+        run: |
+          git fetch --prune --unshallow
+          TAG=$(git describe --tags --abbrev=0)
+          REPO_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
+          echo ::set-output name=tag::${TAG}
+          echo ::set-output name=repo_name::${REPO_NAME}
+          echo ::set-output name=container_instances_name::ci-${REPO_NAME}
+
+      - name: "Azure Login"
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Contaner Registry Login"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: "Cleanup Container"
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.19.1
+          inlineScript: |
+            exist=$(az container list -g ${{ secrets.RESOURCE_GROUP }} --query "[?name=='${{ steps.prep.outputs.container_instances_name }}']")
+            if [[ -n $exist ]]; then az container delete -g ${{ secrets.RESOURCE_GROUP }} -n ${{ steps.prep.outputs.container_instances_name }} --yes; fi
+
+      - name: "Deploy Container"
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.19.1
+          inlineScript: >
+            az container create
+            -g ${{ secrets.RESOURCE_GROUP }}
+            -n ${{ steps.prep.outputs.container_instances_name }}
+            --cpu 0.1
+            --memory 0.1
+            --restart-policy OnFailure
+            --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ steps.prep.outputs.repo_name }}:${{ steps.prep.outputs.tag }}
+            --registry-login-server ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            --registry-username ${{ secrets.REGISTRY_USERNAME }}
+            --registry-password ${{ secrets.REGISTRY_PASSWORD }}
+            --assign-identity ${{ secrets.USER_ASSIGNED_IDENTITY }}
+            --log-analytics-workspace ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+            --log-analytics-workspace-key ${{ secrets.LOG_ANALYTICS_WORKSPACE_KEY }}
+            --environment-variables
+            "AZURE_ENVIRONMENT"="public"
+            "AZURE_SUBSCRIPTION_ID"="${{ secrets.SUBSCRIPTION_ID }}"
+            "SERVICETAGS_CHECK_STORAGE_ACCOUNT_NAME"="${{ secrets.SERVICETAGS_CHECK_STORAGE_ACCOUNT_NAME }}"
+
