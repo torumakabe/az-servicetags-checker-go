@@ -19,7 +19,7 @@ jobs:
         id: prep
         run: |
           git fetch --prune --unshallow
-          TAG=$(git describe --tags --abbrev=0)
+          TAG=$(git tag --sort -version:refname | head -n1)
           REPO_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
           echo ::set-output name=tag::${TAG}
           echo ::set-output name=repo_name::${REPO_NAME}
