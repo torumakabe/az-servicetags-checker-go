@@ -78,9 +78,6 @@ func buildClient() (*Client, error) {
 	blobsClient.Client.Authorizer = storageAuth
 
 	serviceTagsClient := network.NewServiceTagsClient(os.Getenv("AZURE_SUBSCRIPTION_ID"))
-	if err != nil {
-		return nil, err
-	}
 	serviceTagsClient.Authorizer = auth
 
 	result := &Client{
